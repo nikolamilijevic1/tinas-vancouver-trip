@@ -383,6 +383,21 @@ document.addEventListener("DOMContentLoaded", () => {
   $("alert-toggle-btn").addEventListener("click", () => {
     $("alert-panel").classList.toggle("hidden");
   });
+  $("share-trip-btn").addEventListener("click", async () => {
+    const lbl = $("share-trip-label");
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      lbl.textContent = "Link copied";
+      setTimeout(() => {
+        lbl.textContent = "Share trip";
+      }, 2000);
+    } catch {
+      lbl.textContent = "Copy URL above";
+      setTimeout(() => {
+        lbl.textContent = "Share trip";
+      }, 2000);
+    }
+  });
   $("close-alert-btn").addEventListener("click", () => {
     $("alert-panel").classList.add("hidden");
   });

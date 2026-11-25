@@ -11,24 +11,65 @@
 </head>
 <body>
   <div class="page">
-    <!-- Minimal Top Bar -->
-    <nav class="topbar">
-      <span class="route-tag">YOW &rarr; YVR &middot; 1 adult &middot; CAD</span>
-      <div class="topbar-right">
-        <a href="#walks" class="nav-link">Coffee walks</a>
-        <button type="button" class="alert-toggle-btn" id="alert-toggle-btn">
-          <span class="alert-dot" id="alert-dot"></span>
-          <span id="alert-toggle-label">Email alerts</span>
-        </button>
-      </div>
-    </nav>
+    <!-- Editorial Vancouver Hero Card -->
+    <header class="hero-card">
+      <div class="hero-overlay" aria-hidden="true"></div>
+      <div class="hero-content">
+        <div class="hero-top-row">
+          <span class="hero-season">
+            <span class="season-dot"></span>
+            WINTER &rsquo;26 / &rsquo;27
+          </span>
+          <div class="hero-top-actions">
+            <button type="button" class="hero-glass-btn" id="alert-toggle-btn">
+              <span class="alert-dot" id="alert-dot"></span>
+              <span id="alert-toggle-label">Email alerts</span>
+            </button>
+            <button type="button" class="hero-glass-btn" id="share-trip-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                <polyline points="16 6 12 2 8 6"></polyline>
+                <line x1="12" y1="2" x2="12" y2="15"></line>
+              </svg>
+              <span id="share-trip-label">Share trip</span>
+            </button>
+          </div>
+        </div>
 
-    <!-- Focus Welcome Header -->
-    <header class="welcome">
-      <h1>Welcome, <em>Tina.</em></h1>
-      <p class="welcome-sub">
-        Get ready to plan your Vancouver trip. Pick roughly when you'd like to leave and come back, and we'll pull live round-trip flights from Ottawa.
-      </p>
+        <div class="hero-bottom-row">
+          <div class="hero-text">
+            <h1>Welcome, <em>Tina.</em></h1>
+            <p class="hero-sub">Let&rsquo;s plan your Vancouver trip.</p>
+            <a href="#walks" class="hero-walks-link">Explore the coffee walks</a>
+          </div>
+
+          <div class="route-ticket" aria-label="Ottawa to Vancouver round-trip economy for 1 adult">
+            <div class="ticket-main">
+              <div class="ticket-city">
+                <span class="ticket-label">OTTAWA</span>
+                <strong class="ticket-code">YOW</strong>
+              </div>
+              <div class="ticket-path" aria-hidden="true">
+                <span class="ticket-dash"></span>
+                <svg class="ticket-plane" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+                <span class="ticket-dash"></span>
+              </div>
+              <div class="ticket-city right">
+                <span class="ticket-label">VANCOUVER</span>
+                <strong class="ticket-code">YVR</strong>
+              </div>
+            </div>
+            <div class="ticket-meta">
+              <span>ROUND TRIP</span>
+              <span>1 ADULT</span>
+              <span>ECONOMY</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </header>
 
     <!-- Collapsible Simple Email Alert Bar -->

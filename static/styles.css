@@ -47,95 +47,228 @@ body {
   padding: 22px 20px 64px;
 }
 
-/* Top Bar */
-.topbar {
+/* Editorial Vancouver Hero Card */
+.hero-card {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  min-height: 318px;
+  margin-bottom: 20px;
+  background-color: #102620;
+  background-image: url("/static/images/hero_vancouver.jpg");
+  background-size: cover;
+  background-position: center 42%;
+  box-shadow: 0 14px 40px rgba(16, 38, 32, 0.14);
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(100deg, rgba(14, 34, 28, 0.96) 0%, rgba(15, 36, 30, 0.86) 38%, rgba(16, 38, 32, 0.42) 68%, rgba(16, 38, 32, 0.18) 100%),
+    linear-gradient(to top, rgba(13, 31, 26, 0.72) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  padding: 24px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 26px;
+}
+
+.hero-top-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding-bottom: 18px;
+  flex-wrap: wrap;
 }
 
-.route-tag {
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--ink-muted);
+.hero-season {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: #dff39d;
 }
 
-.topbar-right {
+.season-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #dff39d;
+}
+
+.hero-top-actions {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 8px;
 }
 
-.nav-link {
-  font-size: 0.84rem;
-  font-weight: 500;
-  color: var(--ink-secondary);
-  text-decoration: none;
-}
-
-.nav-link:hover {
-  color: var(--ink);
-}
-
-.alert-toggle-btn {
+.hero-glass-btn {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 7px 13px;
-  border-radius: 999px;
-  border: 1px solid var(--border-strong);
-  background: var(--surface);
-  color: var(--ink);
+  padding: 9px 15px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(16, 36, 30, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #f7f6f2;
   font: 500 0.82rem/1 var(--font-sans);
   cursor: pointer;
-  transition: border-color 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.alert-toggle-btn:hover {
-  border-color: var(--ink);
+.hero-glass-btn:hover {
+  background: rgba(22, 48, 40, 0.88);
+  border-color: rgba(255, 255, 255, 0.34);
 }
 
 .alert-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #c4bab0;
+  background: rgba(255, 255, 255, 0.45);
 }
 
 .alert-dot.on {
-  background: var(--sage);
+  background: #dff39d;
+  box-shadow: 0 0 0 3px rgba(223, 243, 157, 0.25);
 }
 
-/* Focus Welcome Header */
-.welcome {
-  text-align: center;
-  max-width: 600px;
-  margin: 14px auto 28px;
+.hero-bottom-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
 }
 
-.welcome h1 {
+.hero-text {
+  max-width: 480px;
+}
+
+.hero-text h1 {
   margin: 0;
   font-family: var(--font-serif);
-  font-weight: 500;
-  font-size: clamp(2.85rem, 5.4vw, 3.85rem);
+  font-weight: 600;
+  font-size: clamp(3rem, 5.6vw, 4.15rem);
   letter-spacing: -0.015em;
-  line-height: 1.05;
-  color: var(--ink);
+  line-height: 1.02;
+  color: #ffffff;
 }
 
-.welcome h1 em {
+.hero-text h1 em {
   font-style: italic;
-  color: var(--sage);
+  font-weight: 500;
+  color: #e3f4a8;
 }
 
-.welcome-sub {
-  margin: 10px 0 0;
-  font-size: 0.96rem;
-  color: var(--ink-secondary);
-  line-height: 1.55;
+.hero-sub {
+  margin: 12px 0 0;
+  font-size: 1.02rem;
+  color: rgba(247, 246, 242, 0.88);
+}
+
+.hero-walks-link {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: #e3f4a8;
+  text-decoration: none;
+  padding-bottom: 3px;
+  border-bottom: 1.5px solid rgba(227, 244, 168, 0.8);
+  transition: opacity 0.15s ease;
+}
+
+.hero-walks-link:hover {
+  opacity: 0.82;
+}
+
+/* Frosted Glass Boarding-Pass Route Widget */
+.route-ticket {
+  min-width: 278px;
+  padding: 15px 18px 13px;
+  border-radius: 14px;
+  background: rgba(15, 34, 29, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.ticket-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.24);
+}
+
+.ticket-city {
+  display: flex;
+  flex-direction: column;
+}
+
+.ticket-city.right {
+  text-align: right;
+}
+
+.ticket-label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.11em;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.ticket-code {
+  font-size: 1.55rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  margin-top: 2px;
+}
+
+.ticket-path {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #dff39d;
+}
+
+.ticket-dash {
+  flex: 1;
+  border-top: 1px dashed rgba(255, 255, 255, 0.35);
+}
+
+.ticket-plane {
+  flex-shrink: 0;
+}
+
+.ticket-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 10px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.78);
 }
 
 /* Alert Panel */
@@ -1018,6 +1151,13 @@ select:focus {
 }
 
 @media (max-width: 600px) {
+  .hero-content {
+    padding: 20px;
+  }
+  .route-ticket {
+    width: 100%;
+    min-width: 0;
+  }
   .walk-gallery {
     grid-template-columns: 1fr;
   }
