@@ -168,116 +168,179 @@
       </div>
 
       <div class="flight-list" id="flight-list"></div>
+      <div class="show-more-wrap hidden" id="show-more-wrap">
+        <button type="button" class="btn btn-subtle" id="show-more-btn">Show all flights</button>
+      </div>
     </section>
 
-    <!-- Vancouver Coffee & Scenic Walks Section -->
+    <!-- Vancouver Coffee & Scenic Walks Section (Stacked One by One with Real Spot Photos) -->
     <section class="walks-section" id="walks" aria-label="Vancouver coffee walks">
       <div class="walks-header">
         <p class="walks-eyebrow">WHILE YOU'RE IN VANCOUVER</p>
         <h2>Three coffee &amp; food walks</h2>
         <p class="walks-sub">
-          Scenic 6 to 11 km routes with standout specialty coffee, warm bakeries, and ocean or neighborhood views along the way.
+          Scenic 6 to 11 km routes with specialty coffee, warm bakeries, and waterfront or neighborhood views along the way.
         </p>
       </div>
 
-      <div class="walks-grid">
+      <div class="walks-stack">
         <!-- Walk 1 -->
         <article class="walk-card">
-          <div class="walk-top">
-            <span class="walk-meta">8.5 km &middot; ~2 hrs &middot; Waterfront</span>
-            <h3>False Creek Seawall to Kitsilano</h3>
-            <p class="walk-desc">
-              A flat, scenic waterfront walk from Yaletown across to Granville Island and along the beaches into Kitsilano, paced with some of the city's best pastries.
-            </p>
+          <div class="walk-gallery">
+            <figure class="walk-photo">
+              <img src="/static/images/walk1_pastry.jpg" alt="Croissant and latte" loading="lazy" />
+              <figcaption>Small Victory &amp; Beaucoup pastries</figcaption>
+            </figure>
+            <figure class="walk-photo">
+              <img src="/static/images/walk1_granville.jpg" alt="Granville Island Public Market waterfront" loading="lazy" />
+              <figcaption>Granville Island Market</figcaption>
+            </figure>
+            <figure class="walk-photo">
+              <img src="/static/images/walk1_kits.jpg" alt="Kitsilano Beach and North Shore mountains" loading="lazy" />
+              <figcaption>Kitsilano Beach &amp; mountains</figcaption>
+            </figure>
           </div>
-          <ol class="walk-stops">
-            <li>
-              <strong>Small Victory Bakery</strong> <span>Yaletown</span>
-              <p>Start with a flat white and a warm croissant or sourdough toast.</p>
-            </li>
-            <li>
-              <strong>False Creek Seawall &amp; Granville Island</strong> <span>Waterfront</span>
-              <p>Walk the seawall under the bridges to the Public Market (worth a stop at Lee's Donuts).</p>
-            </li>
-            <li>
-              <strong>Beaucoup Bakery</strong> <span>Fir St</span>
-              <p>Quick detour up Fir Street for flaky French pastries and seasonal tarts.</p>
-            </li>
-            <li>
-              <strong>Kits Beach to Their There</strong> <span>W 4th Ave</span>
-              <p>Stroll past Vanier Park and Kitsilano Beach, then finish with a latte and mochi donut.</p>
-            </li>
-          </ol>
-          <a class="walk-map-link" target="_blank" rel="noopener"
-             href="https://www.google.com/maps/dir/?api=1&origin=Small+Victory+Bakery,+1088+Homer+St,+Vancouver,+BC&waypoints=Granville+Island+Public+Market,+Vancouver,+BC|Beaucoup+Bakery,+2150+Fir+St,+Vancouver,+BC|Kitsilano+Beach,+Vancouver,+BC&destination=Their+There,+2042+W+4th+Ave,+Vancouver,+BC&travelmode=walking">
-            Open walking route in Google Maps &rarr;
-          </a>
+
+          <div class="walk-body">
+            <div class="walk-head-row">
+              <div>
+                <span class="walk-meta">8.5 km &middot; ~2 hrs &middot; Waterfront &amp; Pastries</span>
+                <h3>False Creek Seawall to Kitsilano</h3>
+                <p class="walk-desc">
+                  A flat, breezy waterfront walk from Yaletown across to Granville Island and along the beaches into Kitsilano, paced with some of the city's best bakeries.
+                </p>
+              </div>
+              <a class="walk-map-btn" target="_blank" rel="noopener"
+                 href="https://www.google.com/maps/dir/?api=1&origin=Small+Victory+Bakery,+1088+Homer+St,+Vancouver,+BC&waypoints=Granville+Island+Public+Market,+Vancouver,+BC|Beaucoup+Bakery,+2150+Fir+St,+Vancouver,+BC|Kitsilano+Beach,+Vancouver,+BC&destination=Their+There,+2042+W+4th+Ave,+Vancouver,+BC&travelmode=walking">
+                Open route in Google Maps &rarr;
+              </a>
+            </div>
+
+            <ol class="walk-stops">
+              <li>
+                <strong>Small Victory Bakery</strong> <span>Yaletown</span>
+                <p>Start with a flat white and a warm croissant or sourdough toast.</p>
+              </li>
+              <li>
+                <strong>False Creek Seawall &amp; Granville Island</strong> <span>Waterfront</span>
+                <p>Walk the seawall under the bridges to the Public Market (worth a stop at Lee's Donuts).</p>
+              </li>
+              <li>
+                <strong>Beaucoup Bakery</strong> <span>Fir St</span>
+                <p>Quick detour up Fir Street for flaky French pastries and seasonal tarts.</p>
+              </li>
+              <li>
+                <strong>Kits Beach to Their There</strong> <span>W 4th Ave</span>
+                <p>Stroll past Vanier Park and Kitsilano Beach, then finish with a latte and mochi donut.</p>
+              </li>
+            </ol>
+          </div>
         </article>
 
         <!-- Walk 2 -->
         <article class="walk-card">
-          <div class="walk-top">
-            <span class="walk-meta">6.5 km &middot; ~1.5 hrs &middot; Neighborhoods</span>
-            <h3>Gastown to Mount Pleasant Coffee Crawl</h3>
-            <p class="walk-desc">
-              Cobblestone streets, architectural coffee bars, and Main Street's indie shops — an easy afternoon loop through Vancouver's best specialty roasters.
-            </p>
+          <div class="walk-gallery">
+            <figure class="walk-photo">
+              <img src="/static/images/walk2_gastown.jpg" alt="Gastown brick street in Vancouver" loading="lazy" />
+              <figcaption>Gastown historic streets</figcaption>
+            </figure>
+            <figure class="walk-photo">
+              <img src="/static/images/walk2_coffee.jpg" alt="Specialty coffee bar" loading="lazy" />
+              <figcaption>Revolver, Prototype &amp; Nemesis</figcaption>
+            </figure>
+            <figure class="walk-photo">
+              <img src="/static/images/walk2_falsecreek.jpg" alt="Olympic Village and False Creek Vancouver" loading="lazy" />
+              <figcaption>False Creek toward Mount Pleasant</figcaption>
+            </figure>
           </div>
-          <ol class="walk-stops">
-            <li>
-              <strong>Revolver Coffee</strong> <span>Gastown</span>
-              <p>Minimalist brick-and-wood bar pouring rotating single-origin roasters from around the world.</p>
-            </li>
-            <li>
-              <strong>Prototype Coffee</strong> <span>East Van</span>
-              <p>Small-batch micro-roaster known for careful pour-overs and unusual single origins.</p>
-            </li>
-            <li>
-              <strong>Nemesis Coffee</strong> <span>Great Northern Way</span>
-              <p>Walk toward the striking circular timber pavilion for in-house roasted coffee and standout pastries.</p>
-            </li>
-            <li>
-              <strong>Elysian Coffee</strong> <span>Mount Pleasant</span>
-              <p>Finish around Ontario &amp; Main Street near local boutiques, bookstores, and neighborhood murals.</p>
-            </li>
-          </ol>
-          <a class="walk-map-link" target="_blank" rel="noopener"
-             href="https://www.google.com/maps/dir/?api=1&origin=Revolver,+325+Cambie+St,+Vancouver,+BC&waypoints=Prototype+Coffee,+883+E+Hastings+St,+Vancouver,+BC|Nemesis+Coffee+GNW,+555+Great+Northern+Way,+Vancouver,+BC&destination=Elysian+Coffee,+2301+Ontario+St,+Vancouver,+BC&travelmode=walking">
-            Open walking route in Google Maps &rarr;
-          </a>
+
+          <div class="walk-body">
+            <div class="walk-head-row">
+              <div>
+                <span class="walk-meta">6.5 km &middot; ~1.5 hrs &middot; Roasters &amp; Neighborhoods</span>
+                <h3>Gastown to Mount Pleasant Coffee Crawl</h3>
+                <p class="walk-desc">
+                  Cobblestone alleys, architectural coffee bars, and Main Street's indie shops — an easy afternoon loop through Vancouver's standout specialty roasters.
+                </p>
+              </div>
+              <a class="walk-map-btn" target="_blank" rel="noopener"
+                 href="https://www.google.com/maps/dir/?api=1&origin=Revolver,+325+Cambie+St,+Vancouver,+BC&waypoints=Prototype+Coffee,+883+E+Hastings+St,+Vancouver,+BC|Nemesis+Coffee+GNW,+555+Great+Northern+Way,+Vancouver,+BC&destination=Elysian+Coffee,+2301+Ontario+St,+Vancouver,+BC&travelmode=walking">
+                Open route in Google Maps &rarr;
+              </a>
+            </div>
+
+            <ol class="walk-stops">
+              <li>
+                <strong>Revolver Coffee</strong> <span>Gastown</span>
+                <p>Minimalist brick-and-wood bar pouring rotating single-origin roasters from around the world.</p>
+              </li>
+              <li>
+                <strong>Prototype Coffee</strong> <span>East Van</span>
+                <p>Small-batch micro-roaster known for careful pour-overs and unusual single origins.</p>
+              </li>
+              <li>
+                <strong>Nemesis Coffee</strong> <span>Great Northern Way</span>
+                <p>Walk toward the striking circular timber pavilion for in-house roasted coffee and standout pastries.</p>
+              </li>
+              <li>
+                <strong>Elysian Coffee</strong> <span>Mount Pleasant</span>
+                <p>Finish around Ontario &amp; Main Street near local boutiques, bookstores, and neighborhood murals.</p>
+              </li>
+            </ol>
+          </div>
         </article>
 
         <!-- Walk 3 -->
         <article class="walk-card">
-          <div class="walk-top">
-            <span class="walk-meta">10.5 km &middot; ~2.5 hrs &middot; Ocean &amp; Cedars</span>
-            <h3>Stanley Park Seawall &amp; West End</h3>
-            <p class="walk-desc">
-              The classic Vancouver coastal loop — towering old-growth cedars, North Shore mountain views, Lions Gate Bridge, and a cozy cafe warm-up at the end.
-            </p>
+          <div class="walk-gallery">
+            <figure class="walk-photo">
+              <img src="/static/images/walk3_seawall.jpg" alt="Stanley Park Seawall and Lions Gate Bridge" loading="lazy" />
+              <figcaption>Stanley Park Seawall &amp; Lions Gate</figcaption>
+            </figure>
+            <figure class="walk-photo">
+              <img src="/static/images/walk3_siwash.jpg" alt="Siwash Rock in Stanley Park" loading="lazy" />
+              <figcaption>Siwash Rock &amp; coastal cedars</figcaption>
+            </figure>
+            <figure class="walk-photo">
+              <img src="/static/images/walk3_englishbay.jpg" alt="English Bay Beach in Vancouver" loading="lazy" />
+              <figcaption>English Bay to West End cafes</figcaption>
+            </figure>
           </div>
-          <ol class="walk-stops">
-            <li>
-              <strong>Beaucoup (St. Regis) &rarr; Coal Harbour</strong> <span>Downtown</span>
-              <p>Grab a hot coffee and pastry to go, then drop down to the Coal Harbour waterfront path.</p>
-            </li>
-            <li>
-              <strong>Brockton Point to Lions Gate Bridge</strong> <span>Stanley Park</span>
-              <p>Follow the seawall around the lighthouse with wide-open harbour and mountain views.</p>
-            </li>
-            <li>
-              <strong>Siwash Rock &amp; Third Beach</strong> <span>West Side of Park</span>
-              <p>Quieter Pacific side of the loop — crisp ocean air and towering evergreens.</p>
-            </li>
-            <li>
-              <strong>English Bay to Greenhorn Cafe</strong> <span>West End</span>
-              <p>Step off the seawall onto tree-lined Nicola Street for a warm espresso and late brunch.</p>
-            </li>
-          </ol>
-          <a class="walk-map-link" target="_blank" rel="noopener"
-             href="https://www.google.com/maps/dir/?api=1&origin=Coal+Harbour+Seawall,+Vancouver,+BC&waypoints=Brockton+Point+Lighthouse,+Vancouver,+BC|Siwash+Rock,+Vancouver,+BC|Third+Beach,+Vancouver,+BC|English+Bay+Beach,+Vancouver,+BC&destination=Greenhorn+Cafe,+994+Nicola+St,+Vancouver,+BC&travelmode=walking">
-            Open walking route in Google Maps &rarr;
-          </a>
+
+          <div class="walk-body">
+            <div class="walk-head-row">
+              <div>
+                <span class="walk-meta">10.5 km &middot; ~2.5 hrs &middot; Ocean &amp; Cedars</span>
+                <h3>Stanley Park Seawall &amp; West End</h3>
+                <p class="walk-desc">
+                  The classic Vancouver coastal loop — towering old-growth cedars, North Shore mountain views, Lions Gate Bridge, and a cozy neighborhood cafe at the end.
+                </p>
+              </div>
+              <a class="walk-map-btn" target="_blank" rel="noopener"
+                 href="https://www.google.com/maps/dir/?api=1&origin=Coal+Harbour+Seawall,+Vancouver,+BC&waypoints=Brockton+Point+Lighthouse,+Vancouver,+BC|Siwash+Rock,+Vancouver,+BC|Third+Beach,+Vancouver,+BC|English+Bay+Beach,+Vancouver,+BC&destination=Greenhorn+Cafe,+994+Nicola+St,+Vancouver,+BC&travelmode=walking">
+                Open route in Google Maps &rarr;
+              </a>
+            </div>
+
+            <ol class="walk-stops">
+              <li>
+                <strong>Beaucoup (St. Regis) &rarr; Coal Harbour</strong> <span>Downtown</span>
+                <p>Grab a hot coffee and pastry to go, then drop down to the Coal Harbour waterfront path.</p>
+              </li>
+              <li>
+                <strong>Brockton Point to Lions Gate Bridge</strong> <span>Stanley Park</span>
+                <p>Follow the seawall around the lighthouse with wide-open harbour and mountain views.</p>
+              </li>
+              <li>
+                <strong>Siwash Rock &amp; Third Beach</strong> <span>West Side</span>
+                <p>Quieter Pacific side of the loop — crisp ocean air and towering evergreens.</p>
+              </li>
+              <li>
+                <strong>English Bay to Greenhorn Cafe</strong> <span>West End</span>
+                <p>Step off the seawall onto tree-lined Nicola Street for a warm espresso and late brunch.</p>
+              </li>
+            </ol>
+          </div>
         </article>
       </div>
     </section>

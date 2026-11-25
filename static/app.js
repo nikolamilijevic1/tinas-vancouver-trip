@@ -10,6 +10,7 @@ const state = {
   sortBy: "recommended",
   airline: "ALL",
   selectedPair: null,
+  showAllFlights: false,
   flights: [],
   matrix: [],
 };
@@ -55,6 +56,7 @@ async function runSearch(forceRefresh = false) {
   if (state.scanning) return;
   state.scanning = true;
   state.selectedPair = null;
+  state.showAllFlights = false;
   state.airline = "ALL";
   state.matrix = [];
 
@@ -234,12 +236,25 @@ function renderFlights() {
   $("results-count").textContent = `${rows.length} flight${rows.length === 1 ? "" : "s"}${pairLabel}`;
 
   if (!rows.length) {
+    $("show-more-wrap").classList.add("hidden");
     list.innerHTML = `<div class="empty-state">No flights match these filters. Try unchecking "Nonstop only" or widening your dates.</div>`;
     return;
   }
 
-  list.innerHTML = rows
-    .slice(0, 35)
+  const defaultLimit = state.selectedPair ? 12 : 4;
+  const limit = state.showAllFlights ? 40 : defaultLimit;
+  const visible = rows.slice(0, limit);
+  const showMoreWrap = $("show-more-wrap");
+  if (rows.length > defaultLimit) {
+    showMoreWrap.classList.remove("hidden");
+    $("show-more-btn").textContent = state.showAllFlights
+      ? "Show fewer flights"
+      : `Show all ${Math.min(rows.length, 40)} flights`;
+  } else {
+    showMoreWrap.classList.add("hidden");
+  }
+
+  list.innerHTML = visible
     .map((f) => {
       const first = f.legs[0];
       const last = f.legs[f.legs.length - 1];
@@ -402,7 +417,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   $("clear-date-filter").addEventListener("click", () => {
     state.selectedPair = null;
+    state.showAllFlights = false;
     renderDateGrid();
+    renderFlights();
+  });
+
+  $("show-more-btn").addEventListener("click", () => {
+    state.showAllFlights = !state.showAllFlights;
     renderFlights();
   });
 

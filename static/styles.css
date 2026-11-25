@@ -728,16 +728,22 @@ select:focus {
   font-size: 0.9rem;
 }
 
-/* Vancouver Coffee & Scenic Walks */
+.show-more-wrap {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Vancouver Coffee & Scenic Walks (Stacked One by One with Photo Previews) */
 .walks-section {
-  margin-top: 48px;
-  padding-top: 36px;
+  margin-top: 34px;
+  padding-top: 30px;
   border-top: 1px solid var(--border);
 }
 
 .walks-header {
-  max-width: 580px;
-  margin-bottom: 22px;
+  max-width: 600px;
+  margin-bottom: 20px;
 }
 
 .walks-eyebrow {
@@ -758,25 +764,79 @@ select:focus {
 }
 
 .walks-sub {
-  margin: 8px 0 0;
+  margin: 7px 0 0;
   font-size: 0.92rem;
   color: var(--ink-secondary);
 }
 
-.walks-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+.walks-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
 }
 
 .walk-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(35, 31, 29, 0.04);
+}
+
+.walk-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  background: var(--border);
+}
+
+.walk-photo {
+  margin: 0;
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--tint);
+}
+
+.walk-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.walk-photo:hover img {
+  transform: scale(1.03);
+}
+
+.walk-photo figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px 11px 8px;
+  background: linear-gradient(to top, rgba(22, 19, 17, 0.72), transparent);
+  color: #ffffff;
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.walk-body {
+  padding: 20px 22px 22px;
+}
+
+.walk-head-row {
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.walk-head-row > div {
+  max-width: 610px;
 }
 
 .walk-meta {
@@ -785,38 +845,60 @@ select:focus {
   font-weight: 500;
   color: var(--sage);
   background: var(--sage-bg);
-  padding: 4px 9px;
+  padding: 4px 10px;
   border-radius: 999px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .walk-card h3 {
   margin: 0 0 6px;
   font-family: var(--font-serif);
   font-weight: 400;
-  font-size: 1.28rem;
-  line-height: 1.2;
+  font-size: 1.45rem;
+  line-height: 1.18;
   color: var(--ink);
 }
 
 .walk-desc {
   margin: 0;
-  font-size: 0.84rem;
+  font-size: 0.88rem;
   color: var(--ink-secondary);
 }
 
+.walk-map-btn {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--sage-border);
+  background: var(--sage-bg);
+  color: var(--sage);
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  margin-top: 4px;
+  transition: background 0.14s ease, color 0.14s ease;
+}
+
+.walk-map-btn:hover {
+  background: var(--sage);
+  border-color: var(--sage);
+  color: #ffffff;
+}
+
 .walk-stops {
-  margin: 0;
-  padding: 14px 0 0 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  margin: 16px 0 0;
+  padding: 16px 0 0 18px;
   border-top: 1px solid var(--border);
-  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 28px;
 }
 
 .walk-stops li {
-  font-size: 0.83rem;
+  font-size: 0.84rem;
   color: var(--ink);
 }
 
@@ -838,24 +920,9 @@ select:focus {
 
 .walk-stops li p {
   margin: 2px 0 0;
-  font-size: 0.8rem;
+  font-size: 0.81rem;
   color: var(--ink-secondary);
-  line-height: 1.4;
-}
-
-.walk-map-link {
-  display: inline-flex;
-  align-items: center;
-  font-size: 0.82rem;
-  font-weight: 500;
-  color: var(--sage);
-  text-decoration: none;
-  padding-top: 10px;
-  border-top: 1px solid var(--border);
-}
-
-.walk-map-link:hover {
-  text-decoration: underline;
+  line-height: 1.42;
 }
 
 .footer {
@@ -867,8 +934,7 @@ select:focus {
 }
 
 @media (max-width: 840px) {
-  .window-grid,
-  .walks-grid {
+  .window-grid {
     grid-template-columns: 1fr;
   }
   .search-submit {
@@ -886,9 +952,19 @@ select:focus {
   .fr-price-wrap {
     text-align: left;
   }
+  .walk-stops {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 600px) {
+  .walk-gallery {
+    grid-template-columns: 1fr;
+  }
+  .walk-photo {
+    aspect-ratio: 16 / 9;
+  }
   .date-pair-inputs {
     grid-template-columns: 1fr;
   }
