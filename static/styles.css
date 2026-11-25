@@ -484,11 +484,31 @@ select:focus {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 16px;
   flex-wrap: wrap;
   margin-top: 16px;
   padding-top: 14px;
   border-top: 1px solid var(--border);
+}
+
+.search-bottom-left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.search-row-primary,
+.search-row-nearby {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.nearby-label {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--ink-muted);
 }
 
 .stay-inline {

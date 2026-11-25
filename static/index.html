@@ -102,31 +102,38 @@
         </div>
 
         <div class="search-bottom">
-          <div class="stay-inline">
-            <span class="stay-label">Stay length</span>
-            <input id="min-nights" type="number" min="1" max="30" value="5" aria-label="Minimum nights" />
-            <span class="stay-sep">to</span>
-            <input id="max-nights" type="number" min="1" max="30" value="10" aria-label="Maximum nights" />
-            <span class="stay-sep">nights</span>
-          </div>
+          <div class="search-bottom-left">
+            <div class="search-row-primary">
+              <div class="stay-inline">
+                <span class="stay-label">Stay length</span>
+                <input id="min-nights" type="number" min="1" max="30" value="5" aria-label="Minimum nights" />
+                <span class="stay-sep">to</span>
+                <input id="max-nights" type="number" min="1" max="30" value="10" aria-label="Maximum nights" />
+                <span class="stay-sep">nights</span>
+              </div>
 
-          <div class="search-options">
-            <label class="check">
-              <input type="checkbox" id="nonstop-toggle" />
-              <span>Nonstop only</span>
-            </label>
-            <label class="check">
-              <input type="checkbox" id="carry-on-toggle" checked />
-              <span>Carry-on bag</span>
-            </label>
-            <label class="check">
-              <input type="checkbox" id="include-yul-toggle" />
-              <span>Include Montreal (YUL)</span>
-            </label>
-            <label class="check">
-              <input type="checkbox" id="include-to-toggle" />
-              <span>Include Toronto (YYZ / YTZ)</span>
-            </label>
+              <label class="check">
+                <input type="checkbox" id="carry-on-toggle" checked />
+                <span>Include carry-on bag</span>
+              </label>
+
+              <label class="check">
+                <input type="checkbox" id="nonstop-toggle" />
+                <span>Nonstop only</span>
+              </label>
+            </div>
+
+            <div class="search-row-nearby">
+              <span class="nearby-label">Also check:</span>
+              <label class="check">
+                <input type="checkbox" id="include-yul-toggle" />
+                <span>Montreal (YUL)</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="include-to-toggle" />
+                <span>Toronto (YYZ / YTZ)</span>
+              </label>
+            </div>
           </div>
 
           <button type="submit" class="btn btn-primary search-submit" id="search-btn">Find flights</button>
