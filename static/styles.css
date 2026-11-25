@@ -14,8 +14,8 @@
   --warn: #a65726;
   --radius: 14px;
   --radius-sm: 9px;
-  --font-serif: "Fraunces", Georgia, serif;
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 *,
@@ -119,10 +119,10 @@ body {
 .welcome h1 {
   margin: 0;
   font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: clamp(2.15rem, 4.5vw, 3rem);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  font-weight: 500;
+  font-size: clamp(2.85rem, 5.4vw, 3.85rem);
+  letter-spacing: -0.015em;
+  line-height: 1.05;
   color: var(--ink);
 }
 
@@ -757,9 +757,10 @@ select:focus {
 .walks-header h2 {
   margin: 0;
   font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: 1.85rem;
-  line-height: 1.15;
+  font-weight: 500;
+  font-size: 2.25rem;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
   color: var(--ink);
 }
 
@@ -853,9 +854,10 @@ select:focus {
 .walk-card h3 {
   margin: 0 0 6px;
   font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: 1.45rem;
-  line-height: 1.18;
+  font-weight: 500;
+  font-size: 1.75rem;
+  letter-spacing: -0.01em;
+  line-height: 1.14;
   color: var(--ink);
 }
 
