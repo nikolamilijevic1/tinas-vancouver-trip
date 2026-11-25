@@ -308,81 +308,8 @@ function renderFlights() {
     .join("");
 }
 
-/* ---------- Email Alert ---------- */
-async function loadAlert() {
-  try {
-    const resp = await fetch("/api/alert");
-    const cfg = await resp.json();
-    $("alert-email").value = cfg.email || "";
-    $("alert-price").value = cfg.max_price_cad || 850;
-    $("alert-nonstop").checked = Boolean(cfg.nonstop_only);
-    $("alert-daily").checked = Boolean(cfg.daily_summary);
-    updateAlertButton(cfg);
-  } catch (err) {
-    console.error("Failed loading alert config:", err);
-  }
-}
-
-function updateAlertButton(cfg) {
-  const active = Boolean(cfg.enabled && cfg.email);
-  $("alert-dot").classList.toggle("on", active);
-  $("alert-toggle-label").textContent = active ? `Alert on · < CA$${cfg.max_price_cad}` : "Email alerts";
-  $("disable-alert-btn").classList.toggle("hidden", !active);
-}
-
-async function saveAlert(enabled) {
-  const status = $("alert-status");
-  status.classList.remove("error");
-  const email = $("alert-email").value.trim();
-  if (enabled && (!email || !email.includes("@"))) {
-    status.classList.add("error");
-    status.textContent = "Please enter a valid email address.";
-    return;
-  }
-
-  const body = {
-    enabled,
-    email,
-    origin: "YOW",
-    destination: "YVR",
-    depart_start: $("depart-start").value,
-    depart_end: $("depart-end").value,
-    return_start: $("return-start").value,
-    return_end: $("return-end").value,
-    min_nights: parseInt($("min-nights").value, 10) || 5,
-    max_nights: parseInt($("max-nights").value, 10) || 10,
-    nonstop_only: $("alert-nonstop").checked,
-    include_carry_on: $("carry-on-toggle").checked,
-    max_price_cad: parseInt($("alert-price").value, 10) || 850,
-    daily_summary: $("alert-daily").checked,
-  };
-
-  try {
-    const resp = await fetch("/api/alert", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    const saved = await resp.json();
-    updateAlertButton(saved);
-    if (!enabled) {
-      status.textContent = "Email alert turned off.";
-    } else if (saved.email_configured) {
-      status.textContent = `Saved. We'll email ${saved.email} if a flight drops under CA$${saved.max_price_cad}.`;
-    } else {
-      status.textContent = `Saved for ${saved.email} (under CA$${saved.max_price_cad}). Email delivery activates once RESEND_API_KEY or SMTP is configured on the server.`;
-    }
-  } catch (err) {
-    status.classList.add("error");
-    status.textContent = `Could not save alert: ${err.message}`;
-  }
-}
-
 /* ---------- Events ---------- */
 document.addEventListener("DOMContentLoaded", () => {
-  $("alert-toggle-btn").addEventListener("click", () => {
-    $("alert-panel").classList.toggle("hidden");
-  });
   $("share-trip-btn").addEventListener("click", async () => {
     const lbl = $("share-trip-label");
     try {
@@ -398,15 +325,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 2000);
     }
   });
-  $("close-alert-btn").addEventListener("click", () => {
-    $("alert-panel").classList.add("hidden");
-  });
-
-  $("alert-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    saveAlert(true);
-  });
-  $("disable-alert-btn").addEventListener("click", () => saveAlert(false));
 
   document.querySelectorAll(".chip").forEach((chip) => {
     chip.addEventListener("click", () => {
@@ -456,6 +374,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  loadAlert();
   runSearch(false);
 });

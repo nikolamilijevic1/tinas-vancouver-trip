@@ -21,10 +21,6 @@
             WINTER &rsquo;26 / &rsquo;27
           </span>
           <div class="hero-top-actions">
-            <button type="button" class="hero-glass-btn" id="alert-toggle-btn">
-              <span class="alert-dot" id="alert-dot"></span>
-              <span id="alert-toggle-label">Email alerts</span>
-            </button>
             <button type="button" class="hero-glass-btn" id="share-trip-btn">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
@@ -71,42 +67,6 @@
         </div>
       </div>
     </header>
-
-    <!-- Collapsible Simple Email Alert Bar -->
-    <section class="alert-panel hidden" id="alert-panel" aria-label="Email price alerts">
-      <div class="alert-panel-head">
-        <div>
-          <strong>Email me if a good deal comes up</strong>
-          <p class="muted">We'll keep checking your travel window and send you an email when prices drop below your target.</p>
-        </div>
-        <button type="button" class="text-btn" id="close-alert-btn">Close</button>
-      </div>
-      <form id="alert-form" class="alert-form">
-        <div class="field grow">
-          <label for="alert-email">Your email</label>
-          <input id="alert-email" type="email" placeholder="tina@example.com" required />
-        </div>
-        <div class="field price-field">
-          <label for="alert-price">Under (CAD)</label>
-          <input id="alert-price" type="number" min="200" max="3000" step="25" value="850" required />
-        </div>
-        <div class="alert-checks">
-          <label class="check">
-            <input type="checkbox" id="alert-nonstop" />
-            <span>Nonstop only</span>
-          </label>
-          <label class="check">
-            <input type="checkbox" id="alert-daily" />
-            <span>Daily summary</span>
-          </label>
-        </div>
-        <div class="alert-btns">
-          <button type="submit" class="btn btn-primary" id="save-alert-btn">Save alert</button>
-          <button type="button" class="btn btn-subtle hidden" id="disable-alert-btn">Turn off</button>
-        </div>
-      </form>
-      <p class="alert-status" id="alert-status"></p>
-    </section>
 
     <!-- Main Search Card (4-Date Departure & Return Window) -->
     <section class="search-box" aria-label="Flight search">
