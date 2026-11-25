@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ottawa to Vancouver Flights</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="page">
+    <!-- Simple Header -->
+    <header class="header">
+      <div class="header-left">
+        <h1>Ottawa to Vancouver</h1>
+        <p class="subtitle">YOW to YVR · Round-trip · 1 adult · CAD</p>
+      </div>
+      <button type="button" class="alert-toggle-btn" id="alert-toggle-btn">
+        <span class="alert-dot" id="alert-dot"></span>
+        <span id="alert-toggle-label">Email alerts</span>
+      </button>
+    </header>
+
+    <!-- Collapsible Simple Email Alert Bar -->
+    <section class="alert-panel hidden" id="alert-panel" aria-label="Email price alerts">
+      <div class="alert-panel-head">
+        <div>
+          <strong>Email me when a good deal comes up</strong>
+          <p class="muted">We'll check your travel window automatically and email you when fares drop below your target.</p>
+        </div>
+        <button type="button" class="text-btn" id="close-alert-btn">Close</button>
+      </div>
+      <form id="alert-form" class="alert-form">
+        <div class="field grow">
+          <label for="alert-email">Email</label>
+          <input id="alert-email" type="email" placeholder="name@example.com" required />
+        </div>
+        <div class="field price-field">
+          <label for="alert-price">Under (CAD)</label>
+          <input id="alert-price" type="number" min="200" max="3000" step="25" value="850" required />
+        </div>
+        <div class="alert-checks">
+          <label class="check">
+            <input type="checkbox" id="alert-nonstop" />
+            <span>Nonstop only</span>
+          </label>
+          <label class="check">
+            <input type="checkbox" id="alert-daily" />
+            <span>Daily summary</span>
+          </label>
+        </div>
+        <div class="alert-btns">
+          <button type="submit" class="btn btn-primary" id="save-alert-btn">Save alert</button>
+          <button type="button" class="btn btn-subtle hidden" id="disable-alert-btn">Turn off</button>
+        </div>
+      </form>
+      <p class="alert-status" id="alert-status"></p>
+    </section>
+
+    <!-- Main Search Controls -->
+    <section class="search-box" aria-label="Flight search">
+      <div class="presets">
+        <button type="button" class="chip active" data-preset="xmas">Dec 18 – Jan 4</button>
+        <button type="button" class="chip" data-preset="before">Dec 20 – Jan 2</button>
+        <button type="button" class="chip" data-preset="early">Dec 14 – Dec 28</button>
+        <button type="button" class="chip" data-preset="after">Dec 26 – Jan 6</button>
+      </div>
+
+      <form id="search-form" class="search-row">
+        <div class="field">
+          <label for="window-start">Earliest departure</label>
+          <input id="window-start" type="date" value="2026-12-18" required />
+        </div>
+
+        <div class="field">
+          <label for="window-end">Latest return</label>
+          <input id="window-end" type="date" value="2027-01-04" required />
+        </div>
+
+        <div class="field nights-field">
+          <label>Stay length</label>
+          <div class="nights-pair">
+            <input id="min-nights" type="number" min="2" max="21" value="6" aria-label="Minimum nights" />
+            <span>to</span>
+            <input id="max-nights" type="number" min="2" max="21" value="9" aria-label="Maximum nights" />
+            <span>nights</span>
+          </div>
+        </div>
+
+        <div class="search-options">
+          <label class="check">
+            <input type="checkbox" id="nonstop-toggle" />
+            <span>Nonstop only</span>
+          </label>
+          <label class="check">
+            <input type="checkbox" id="carry-on-toggle" checked />
+            <span>Carry-on bag</span>
+          </label>
+          <label class="check">
+            <input type="checkbox" id="nearby-toggle" />
+            <span>Include YUL / YXX</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary search-submit" id="search-btn">Search</button>
+      </form>
+
+      <div class="progress-wrap hidden" id="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        <span class="progress-text" id="progress-text">Checking live prices…</span>
+      </div>
+    </section>
+
+    <!-- Cheapest Dates Strip -->
+    <section class="dates-section hidden" id="dates-section">
+      <div class="section-top">
+        <h2>Cheapest dates in this window</h2>
+        <button type="button" class="text-btn hidden" id="clear-date-filter">Show all dates</button>
+      </div>
+      <div class="date-grid" id="date-grid"></div>
+    </section>
+
+    <!-- Flight Results -->
+    <section class="results-section hidden" id="results-section">
+      <div class="results-bar">
+        <div class="results-count" id="results-count"></div>
+        <div class="results-controls">
+          <select id="airline-select" aria-label="Filter by airline">
+            <option value="ALL">All airlines</option>
+          </select>
+          <div class="sort-group" role="tablist" aria-label="Sort flights">
+            <button type="button" class="sort-btn active" data-sort="recommended">Best</button>
+            <button type="button" class="sort-btn" data-sort="price">Cheapest</button>
+            <button type="button" class="sort-btn" data-sort="nonstop">Nonstop</button>
+            <button type="button" class="sort-btn" data-sort="duration">Fastest</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flight-list" id="flight-list"></div>
+    </section>
+
+    <footer class="footer">
+      <span>Live round-trip prices in CAD from Google Flights. Clicking a flight opens the matching itinerary directly on Google Flights.</span>
+    </footer>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

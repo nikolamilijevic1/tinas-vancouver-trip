@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: yow-yvr-flights
+    runtime: docker
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /api/health
+    envVars:
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        value: "Flight Alerts <onboarding@resend.dev>"
