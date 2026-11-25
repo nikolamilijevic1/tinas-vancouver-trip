@@ -1,16 +1,17 @@
 from __future__ import annotations
 
-from typing import Literal
 from pydantic import BaseModel, Field
 
 
 class SearchRequest(BaseModel):
     origin: str = Field(default="YOW")
     destination: str = Field(default="YVR")
-    window_start: str = Field(description="Earliest departure date YYYY-MM-DD")
-    window_end: str = Field(description="Latest return date YYYY-MM-DD")
-    min_nights: int = Field(default=6, ge=2, le=21)
-    max_nights: int = Field(default=9, ge=2, le=21)
+    depart_start: str = Field(description="Earliest departure date YYYY-MM-DD")
+    depart_end: str = Field(description="Latest departure date YYYY-MM-DD")
+    return_start: str = Field(description="Earliest return date YYYY-MM-DD")
+    return_end: str = Field(description="Latest return date YYYY-MM-DD")
+    min_nights: int = Field(default=5, ge=1, le=30)
+    max_nights: int = Field(default=10, ge=1, le=30)
     nonstop_only: bool = False
     include_carry_on: bool = True
     include_nearby_airports: bool = False
@@ -91,10 +92,12 @@ class EmailAlertIn(BaseModel):
     email: str = Field(default="", max_length=254)
     origin: str = "YOW"
     destination: str = "YVR"
-    window_start: str = "2026-12-18"
-    window_end: str = "2027-01-04"
-    min_nights: int = Field(default=6, ge=2, le=21)
-    max_nights: int = Field(default=9, ge=2, le=21)
+    depart_start: str = "2026-12-18"
+    depart_end: str = "2026-12-23"
+    return_start: str = "2026-12-27"
+    return_end: str = "2027-01-04"
+    min_nights: int = Field(default=5, ge=1, le=30)
+    max_nights: int = Field(default=10, ge=1, le=30)
     nonstop_only: bool = False
     include_carry_on: bool = True
     max_price_cad: int = Field(default=850, ge=100, le=5000)

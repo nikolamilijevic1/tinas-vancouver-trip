@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any, AsyncGenerator
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import FileResponse, RedirectResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 from . import database, watcher
@@ -29,12 +29,17 @@ async def lifespan(_app: FastAPI):
         await watcher.stop_watcher()
 
 
-app = FastAPI(title="Ottawa to Vancouver Flights", lifespan=lifespan)
+app = FastAPI(title="Tina's Vancouver Trip", lifespan=lifespan)
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 
 @app.get("/")
-async def index():
+async def root_redirect():
+    return RedirectResponse(url="/tinas-vancouver-trip", status_code=302)
+
+
+@app.get("/tinas-vancouver-trip")
+async def tinas_trip_page():
     return FileResponse(STATIC_DIR / "index.html")
 
 
@@ -47,8 +52,10 @@ async def health():
 async def search_stream(req: SearchRequest):
     async def event_stream() -> AsyncGenerator[str, None]:
         pairs = generate_candidate_pairs(
-            req.window_start,
-            req.window_end,
+            req.depart_start,
+            req.depart_end,
+            req.return_start,
+            req.return_end,
             req.min_nights,
             req.max_nights,
             max_pairs=req.max_pairs,

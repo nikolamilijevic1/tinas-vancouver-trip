@@ -56,8 +56,10 @@ async def run_alert_check(*, force_send: bool = False) -> dict[str, Any]:
         return {"ok": False, "detail": "No email address saved."}
 
     pairs = generate_candidate_pairs(
-        cfg["window_start"],
-        cfg["window_end"],
+        cfg["depart_start"],
+        cfg["depart_end"],
+        cfg["return_start"],
+        cfg["return_end"],
         cfg["min_nights"],
         cfg["max_nights"],
         max_pairs=8,
@@ -120,8 +122,8 @@ async def run_alert_check(*, force_send: bool = False) -> dict[str, Any]:
 
         subject, text_body, html_body = build_deal_email(
             flights=picks,
-            window_start=cfg["window_start"],
-            window_end=cfg["window_end"],
+            window_start=cfg["depart_start"],
+            window_end=cfg["return_end"],
             reason=reason,
         )
         ok, detail = await send_email(cfg["email"], subject, text_body, html_body)

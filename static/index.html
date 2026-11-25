@@ -3,39 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ottawa to Vancouver Flights</title>
+  <title>Tina's Vancouver Trip</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/static/styles.css" />
 </head>
 <body>
   <div class="page">
-    <!-- Simple Header -->
-    <header class="header">
-      <div class="header-left">
-        <h1>Ottawa to Vancouver</h1>
-        <p class="subtitle">YOW to YVR · Round-trip · 1 adult · CAD</p>
+    <!-- Minimal Top Bar -->
+    <nav class="topbar">
+      <span class="route-tag">YOW &rarr; YVR &middot; 1 adult &middot; CAD</span>
+      <div class="topbar-right">
+        <a href="#walks" class="nav-link">Coffee walks</a>
+        <button type="button" class="alert-toggle-btn" id="alert-toggle-btn">
+          <span class="alert-dot" id="alert-dot"></span>
+          <span id="alert-toggle-label">Email alerts</span>
+        </button>
       </div>
-      <button type="button" class="alert-toggle-btn" id="alert-toggle-btn">
-        <span class="alert-dot" id="alert-dot"></span>
-        <span id="alert-toggle-label">Email alerts</span>
-      </button>
+    </nav>
+
+    <!-- Focus Welcome Header -->
+    <header class="welcome">
+      <h1>Welcome, <em>Tina.</em></h1>
+      <p class="welcome-sub">
+        Get ready to plan your Vancouver trip. Pick roughly when you'd like to leave and come back, and we'll pull live round-trip flights from Ottawa.
+      </p>
     </header>
 
     <!-- Collapsible Simple Email Alert Bar -->
     <section class="alert-panel hidden" id="alert-panel" aria-label="Email price alerts">
       <div class="alert-panel-head">
         <div>
-          <strong>Email me when a good deal comes up</strong>
-          <p class="muted">We'll check your travel window automatically and email you when fares drop below your target.</p>
+          <strong>Email me if a good deal comes up</strong>
+          <p class="muted">We'll keep checking your travel window and send you an email when prices drop below your target.</p>
         </div>
         <button type="button" class="text-btn" id="close-alert-btn">Close</button>
       </div>
       <form id="alert-form" class="alert-form">
         <div class="field grow">
-          <label for="alert-email">Email</label>
-          <input id="alert-email" type="email" placeholder="name@example.com" required />
+          <label for="alert-email">Your email</label>
+          <input id="alert-email" type="email" placeholder="tina@example.com" required />
         </div>
         <div class="field price-field">
           <label for="alert-price">Under (CAD)</label>
@@ -59,52 +67,72 @@
       <p class="alert-status" id="alert-status"></p>
     </section>
 
-    <!-- Main Search Controls -->
+    <!-- Main Search Card (4-Date Departure & Return Window) -->
     <section class="search-box" aria-label="Flight search">
       <div class="presets">
-        <button type="button" class="chip active" data-preset="xmas">Dec 18 – Jan 4</button>
-        <button type="button" class="chip" data-preset="before">Dec 20 – Jan 2</button>
-        <button type="button" class="chip" data-preset="early">Dec 14 – Dec 28</button>
-        <button type="button" class="chip" data-preset="after">Dec 26 – Jan 6</button>
+        <button type="button" class="chip active" data-preset="xmas">Christmas break</button>
+        <button type="button" class="chip" data-preset="before">Before Xmas &rarr; New Year's</button>
+        <button type="button" class="chip" data-preset="early">Mid-Dec &rarr; Dec 28</button>
+        <button type="button" class="chip" data-preset="after">After Christmas</button>
       </div>
 
-      <form id="search-form" class="search-row">
-        <div class="field">
-          <label for="window-start">Earliest departure</label>
-          <input id="window-start" type="date" value="2026-12-18" required />
-        </div>
+      <form id="search-form">
+        <div class="window-grid">
+          <div class="window-group">
+            <span class="group-title">Flying out &middot; Ottawa to Vancouver</span>
+            <div class="date-pair-inputs">
+              <div class="field">
+                <label for="depart-start">Earliest departure</label>
+                <input id="depart-start" type="date" value="2026-12-18" required />
+              </div>
+              <div class="field">
+                <label for="depart-end">Latest departure</label>
+                <input id="depart-end" type="date" value="2026-12-23" required />
+              </div>
+            </div>
+          </div>
 
-        <div class="field">
-          <label for="window-end">Latest return</label>
-          <input id="window-end" type="date" value="2027-01-04" required />
-        </div>
-
-        <div class="field nights-field">
-          <label>Stay length</label>
-          <div class="nights-pair">
-            <input id="min-nights" type="number" min="2" max="21" value="6" aria-label="Minimum nights" />
-            <span>to</span>
-            <input id="max-nights" type="number" min="2" max="21" value="9" aria-label="Maximum nights" />
-            <span>nights</span>
+          <div class="window-group">
+            <span class="group-title">Flying home &middot; Vancouver to Ottawa</span>
+            <div class="date-pair-inputs">
+              <div class="field">
+                <label for="return-start">Earliest return</label>
+                <input id="return-start" type="date" value="2026-12-27" required />
+              </div>
+              <div class="field">
+                <label for="return-end">Latest return</label>
+                <input id="return-end" type="date" value="2027-01-04" required />
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="search-options">
-          <label class="check">
-            <input type="checkbox" id="nonstop-toggle" />
-            <span>Nonstop only</span>
-          </label>
-          <label class="check">
-            <input type="checkbox" id="carry-on-toggle" checked />
-            <span>Carry-on bag</span>
-          </label>
-          <label class="check">
-            <input type="checkbox" id="nearby-toggle" />
-            <span>Include YUL / YXX</span>
-          </label>
-        </div>
+        <div class="search-bottom">
+          <div class="stay-inline">
+            <span class="stay-label">Stay length</span>
+            <input id="min-nights" type="number" min="1" max="30" value="5" aria-label="Minimum nights" />
+            <span class="stay-sep">to</span>
+            <input id="max-nights" type="number" min="1" max="30" value="10" aria-label="Maximum nights" />
+            <span class="stay-sep">nights</span>
+          </div>
 
-        <button type="submit" class="btn btn-primary search-submit" id="search-btn">Search</button>
+          <div class="search-options">
+            <label class="check">
+              <input type="checkbox" id="nonstop-toggle" />
+              <span>Nonstop only</span>
+            </label>
+            <label class="check">
+              <input type="checkbox" id="carry-on-toggle" checked />
+              <span>Carry-on bag</span>
+            </label>
+            <label class="check">
+              <input type="checkbox" id="nearby-toggle" />
+              <span>Include YUL / YXX</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary search-submit" id="search-btn">Find flights</button>
+        </div>
       </form>
 
       <div class="progress-wrap hidden" id="progress-wrap">
@@ -116,7 +144,7 @@
     <!-- Cheapest Dates Strip -->
     <section class="dates-section hidden" id="dates-section">
       <div class="section-top">
-        <h2>Cheapest dates in this window</h2>
+        <h2>Cheapest dates in your window</h2>
         <button type="button" class="text-btn hidden" id="clear-date-filter">Show all dates</button>
       </div>
       <div class="date-grid" id="date-grid"></div>
@@ -142,8 +170,120 @@
       <div class="flight-list" id="flight-list"></div>
     </section>
 
+    <!-- Vancouver Coffee & Scenic Walks Section -->
+    <section class="walks-section" id="walks" aria-label="Vancouver coffee walks">
+      <div class="walks-header">
+        <p class="walks-eyebrow">WHILE YOU'RE IN VANCOUVER</p>
+        <h2>Three coffee &amp; food walks</h2>
+        <p class="walks-sub">
+          Scenic 6 to 11 km routes with standout specialty coffee, warm bakeries, and ocean or neighborhood views along the way.
+        </p>
+      </div>
+
+      <div class="walks-grid">
+        <!-- Walk 1 -->
+        <article class="walk-card">
+          <div class="walk-top">
+            <span class="walk-meta">8.5 km &middot; ~2 hrs &middot; Waterfront</span>
+            <h3>False Creek Seawall to Kitsilano</h3>
+            <p class="walk-desc">
+              A flat, scenic waterfront walk from Yaletown across to Granville Island and along the beaches into Kitsilano, paced with some of the city's best pastries.
+            </p>
+          </div>
+          <ol class="walk-stops">
+            <li>
+              <strong>Small Victory Bakery</strong> <span>Yaletown</span>
+              <p>Start with a flat white and a warm croissant or sourdough toast.</p>
+            </li>
+            <li>
+              <strong>False Creek Seawall &amp; Granville Island</strong> <span>Waterfront</span>
+              <p>Walk the seawall under the bridges to the Public Market (worth a stop at Lee's Donuts).</p>
+            </li>
+            <li>
+              <strong>Beaucoup Bakery</strong> <span>Fir St</span>
+              <p>Quick detour up Fir Street for flaky French pastries and seasonal tarts.</p>
+            </li>
+            <li>
+              <strong>Kits Beach to Their There</strong> <span>W 4th Ave</span>
+              <p>Stroll past Vanier Park and Kitsilano Beach, then finish with a latte and mochi donut.</p>
+            </li>
+          </ol>
+          <a class="walk-map-link" target="_blank" rel="noopener"
+             href="https://www.google.com/maps/dir/?api=1&origin=Small+Victory+Bakery,+1088+Homer+St,+Vancouver,+BC&waypoints=Granville+Island+Public+Market,+Vancouver,+BC|Beaucoup+Bakery,+2150+Fir+St,+Vancouver,+BC|Kitsilano+Beach,+Vancouver,+BC&destination=Their+There,+2042+W+4th+Ave,+Vancouver,+BC&travelmode=walking">
+            Open walking route in Google Maps &rarr;
+          </a>
+        </article>
+
+        <!-- Walk 2 -->
+        <article class="walk-card">
+          <div class="walk-top">
+            <span class="walk-meta">6.5 km &middot; ~1.5 hrs &middot; Neighborhoods</span>
+            <h3>Gastown to Mount Pleasant Coffee Crawl</h3>
+            <p class="walk-desc">
+              Cobblestone streets, architectural coffee bars, and Main Street's indie shops — an easy afternoon loop through Vancouver's best specialty roasters.
+            </p>
+          </div>
+          <ol class="walk-stops">
+            <li>
+              <strong>Revolver Coffee</strong> <span>Gastown</span>
+              <p>Minimalist brick-and-wood bar pouring rotating single-origin roasters from around the world.</p>
+            </li>
+            <li>
+              <strong>Prototype Coffee</strong> <span>East Van</span>
+              <p>Small-batch micro-roaster known for careful pour-overs and unusual single origins.</p>
+            </li>
+            <li>
+              <strong>Nemesis Coffee</strong> <span>Great Northern Way</span>
+              <p>Walk toward the striking circular timber pavilion for in-house roasted coffee and standout pastries.</p>
+            </li>
+            <li>
+              <strong>Elysian Coffee</strong> <span>Mount Pleasant</span>
+              <p>Finish around Ontario &amp; Main Street near local boutiques, bookstores, and neighborhood murals.</p>
+            </li>
+          </ol>
+          <a class="walk-map-link" target="_blank" rel="noopener"
+             href="https://www.google.com/maps/dir/?api=1&origin=Revolver,+325+Cambie+St,+Vancouver,+BC&waypoints=Prototype+Coffee,+883+E+Hastings+St,+Vancouver,+BC|Nemesis+Coffee+GNW,+555+Great+Northern+Way,+Vancouver,+BC&destination=Elysian+Coffee,+2301+Ontario+St,+Vancouver,+BC&travelmode=walking">
+            Open walking route in Google Maps &rarr;
+          </a>
+        </article>
+
+        <!-- Walk 3 -->
+        <article class="walk-card">
+          <div class="walk-top">
+            <span class="walk-meta">10.5 km &middot; ~2.5 hrs &middot; Ocean &amp; Cedars</span>
+            <h3>Stanley Park Seawall &amp; West End</h3>
+            <p class="walk-desc">
+              The classic Vancouver coastal loop — towering old-growth cedars, North Shore mountain views, Lions Gate Bridge, and a cozy cafe warm-up at the end.
+            </p>
+          </div>
+          <ol class="walk-stops">
+            <li>
+              <strong>Beaucoup (St. Regis) &rarr; Coal Harbour</strong> <span>Downtown</span>
+              <p>Grab a hot coffee and pastry to go, then drop down to the Coal Harbour waterfront path.</p>
+            </li>
+            <li>
+              <strong>Brockton Point to Lions Gate Bridge</strong> <span>Stanley Park</span>
+              <p>Follow the seawall around the lighthouse with wide-open harbour and mountain views.</p>
+            </li>
+            <li>
+              <strong>Siwash Rock &amp; Third Beach</strong> <span>West Side of Park</span>
+              <p>Quieter Pacific side of the loop — crisp ocean air and towering evergreens.</p>
+            </li>
+            <li>
+              <strong>English Bay to Greenhorn Cafe</strong> <span>West End</span>
+              <p>Step off the seawall onto tree-lined Nicola Street for a warm espresso and late brunch.</p>
+            </li>
+          </ol>
+          <a class="walk-map-link" target="_blank" rel="noopener"
+             href="https://www.google.com/maps/dir/?api=1&origin=Coal+Harbour+Seawall,+Vancouver,+BC&waypoints=Brockton+Point+Lighthouse,+Vancouver,+BC|Siwash+Rock,+Vancouver,+BC|Third+Beach,+Vancouver,+BC|English+Bay+Beach,+Vancouver,+BC&destination=Greenhorn+Cafe,+994+Nicola+St,+Vancouver,+BC&travelmode=walking">
+            Open walking route in Google Maps &rarr;
+          </a>
+        </article>
+      </div>
+    </section>
+
     <footer class="footer">
-      <span>Live round-trip prices in CAD from Google Flights. Clicking a flight opens the matching itinerary directly on Google Flights.</span>
+      <span>Live round-trip prices in CAD from Google Flights. Clicking any flight opens the matching itinerary directly on Google Flights.</span>
     </footer>
   </div>
 

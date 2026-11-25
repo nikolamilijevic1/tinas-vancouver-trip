@@ -314,39 +314,48 @@ def fetch_pair_live(
 
 
 def generate_candidate_pairs(
-    window_start: str,
-    window_end: str,
+    depart_start: str,
+    depart_end: str,
+    return_start: str,
+    return_end: str,
     min_nights: int,
     max_nights: int,
     max_pairs: int = 10,
 ) -> list[tuple[str, str]]:
+    """Build well-distributed (depart, return) pairs respecting earliest/latest departure & return."""
     today = date.today()
-    start_d = max(date.fromisoformat(window_start), today + timedelta(days=1))
-    end_d = date.fromisoformat(window_end)
-    if end_d <= start_d + timedelta(days=1):
-        end_d = start_d + timedelta(days=max(min_nights, 5))
+    dep_min = max(date.fromisoformat(depart_start), today + timedelta(days=1))
+    dep_max = max(date.fromisoformat(depart_end), dep_min)
+    ret_min = max(date.fromisoformat(return_start), dep_min + timedelta(days=1))
+    ret_max = max(date.fromisoformat(return_end), ret_min)
 
-    total_span = (end_d - start_d).days
-    eff_min = min(min_nights, max(2, total_span))
-    eff_max = min(max_nights, max(eff_min, total_span))
+    eff_min = max(1, min(min_nights, max_nights))
+    eff_max = max(eff_min, max_nights)
 
+    # Collect all pairs within both windows AND stay-length range
     all_pairs: list[tuple[date, date]] = []
-    cur = start_d
-    while cur <= end_d - timedelta(days=eff_min):
-        for n in range(eff_min, eff_max + 1):
-            ret = cur + timedelta(days=n)
-            if ret <= end_d:
-                all_pairs.append((cur, ret))
-        cur += timedelta(days=1)
+    relaxed_pairs: list[tuple[date, date]] = []
+    cur_dep = dep_min
+    while cur_dep <= dep_max:
+        cur_ret = ret_min
+        while cur_ret <= ret_max:
+            nights = (cur_ret - cur_dep).days
+            if nights >= 1:
+                relaxed_pairs.append((cur_dep, cur_ret))
+                if eff_min <= nights <= eff_max:
+                    all_pairs.append((cur_dep, cur_ret))
+            cur_ret += timedelta(days=1)
+        cur_dep += timedelta(days=1)
 
-    if not all_pairs:
-        return [(start_d.isoformat(), min(end_d, start_d + timedelta(days=eff_min)).isoformat())]
-    if len(all_pairs) <= max_pairs:
-        return [(a.isoformat(), b.isoformat()) for a, b in all_pairs]
+    pool = all_pairs or relaxed_pairs
+    if not pool:
+        return [(dep_min.isoformat(), ret_max.isoformat())]
+    if len(pool) <= max_pairs:
+        return [(a.isoformat(), b.isoformat()) for a, b in pool]
 
     target_nights = (eff_min + eff_max) / 2.0
     by_dep: dict[date, list[tuple[date, date]]] = {}
-    for a, b in all_pairs:
+    for a, b in pool:
         by_dep.setdefault(a, []).append((a, b))
 
     unique_deps = sorted(by_dep.keys())
@@ -358,16 +367,31 @@ def generate_candidate_pairs(
 
     selected: list[tuple[date, date]] = []
     selected_set: set[tuple[date, date]] = set()
-    for dep in chosen_deps:
-        pick = sorted(by_dep[dep], key=lambda p: (abs((p[1] - p[0]).days - target_nights), p[1]))[0]
+    # Pass 1: one balanced return per departure date, alternating earlier/later return dates for variety
+    for idx, dep in enumerate(chosen_deps):
+        cands = sorted(by_dep[dep], key=lambda p: (abs((p[1] - p[0]).days - target_nights), p[1]))
+        pick = cands[0] if idx % 2 == 0 or len(cands) == 1 else cands[min(1, len(cands) - 1)]
         selected.append(pick)
         selected_set.add(pick)
 
+    # Pass 2: fill remaining slots maximizing return-date coverage across return_start..return_end
     if len(selected) < max_pairs:
-        rem = [p for p in all_pairs if p not in selected_set]
-        rem.sort(key=lambda p: (abs((p[1] - p[0]).days - target_nights), p[0]))
-        for p in rem[: max_pairs - len(selected)]:
+        used_returns = {p[1] for p in selected}
+        rem = [p for p in pool if p not in selected_set]
+        rem.sort(
+            key=lambda p: (
+                0 if p[1] not in used_returns else 1,
+                abs((p[1] - p[0]).days - target_nights),
+                p[0],
+                p[1],
+            )
+        )
+        for p in rem:
+            if len(selected) >= max_pairs:
+                break
             selected.append(p)
+            selected_set.add(p)
+            used_returns.add(p[1])
 
     selected.sort()
     return [(a.isoformat(), b.isoformat()) for a, b in selected]

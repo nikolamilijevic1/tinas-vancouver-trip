@@ -1,15 +1,15 @@
 const PRESETS = {
-  xmas: { start: "2026-12-18", end: "2027-01-04", min: 6, max: 9 },
-  before: { start: "2026-12-20", end: "2027-01-02", min: 6, max: 9 },
-  early: { start: "2026-12-14", end: "2026-12-28", min: 6, max: 9 },
-  after: { start: "2026-12-26", end: "2027-01-06", min: 5, max: 8 },
+  xmas: { depStart: "2026-12-18", depEnd: "2026-12-23", retStart: "2026-12-27", retEnd: "2027-01-04", min: 5, max: 10 },
+  before: { depStart: "2026-12-19", depEnd: "2026-12-22", retStart: "2026-12-29", retEnd: "2027-01-02", min: 6, max: 10 },
+  early: { depStart: "2026-12-14", depEnd: "2026-12-19", retStart: "2026-12-23", retEnd: "2026-12-28", min: 5, max: 9 },
+  after: { depStart: "2026-12-26", depEnd: "2026-12-29", retStart: "2027-01-01", retEnd: "2027-01-06", min: 4, max: 9 },
 };
 
 const state = {
   scanning: false,
   sortBy: "recommended",
   airline: "ALL",
-  selectedPair: null, // "origin|dest|dep|ret" or null
+  selectedPair: null,
   flights: [],
   matrix: [],
 };
@@ -64,14 +64,16 @@ async function runSearch(forceRefresh = false) {
   $("progress-fill").style.width = "6%";
   $("progress-text").textContent = "Checking live Google Flights prices…";
 
-  const minN = Math.max(2, parseInt($("min-nights").value, 10) || 6);
-  const maxN = Math.max(minN, parseInt($("max-nights").value, 10) || 9);
+  const minN = Math.max(1, parseInt($("min-nights").value, 10) || 5);
+  const maxN = Math.max(minN, parseInt($("max-nights").value, 10) || 10);
 
   const payload = {
     origin: "YOW",
     destination: "YVR",
-    window_start: $("window-start").value,
-    window_end: $("window-end").value,
+    depart_start: $("depart-start").value,
+    depart_end: $("depart-end").value,
+    return_start: $("return-start").value,
+    return_end: $("return-end").value,
     min_nights: minN,
     max_nights: maxN,
     nonstop_only: $("nonstop-toggle").checked,
@@ -112,7 +114,7 @@ async function runSearch(forceRefresh = false) {
   } finally {
     state.scanning = false;
     $("search-btn").disabled = false;
-    $("search-btn").textContent = "Search";
+    $("search-btn").textContent = "Find flights";
   }
 }
 
@@ -151,7 +153,7 @@ function renderDateGrid() {
   const grid = $("date-grid");
   const cells = state.matrix.filter((c) => c.cheapest_cad);
   if (!cells.length) {
-    grid.innerHTML = `<div class="empty-state">No prices returned for this date range.</div>`;
+    grid.innerHTML = `<div class="empty-state">No prices returned for these dates.</div>`;
     return;
   }
 
@@ -328,10 +330,12 @@ async function saveAlert(enabled) {
     email,
     origin: "YOW",
     destination: "YVR",
-    window_start: $("window-start").value,
-    window_end: $("window-end").value,
-    min_nights: parseInt($("min-nights").value, 10) || 6,
-    max_nights: parseInt($("max-nights").value, 10) || 9,
+    depart_start: $("depart-start").value,
+    depart_end: $("depart-end").value,
+    return_start: $("return-start").value,
+    return_end: $("return-end").value,
+    min_nights: parseInt($("min-nights").value, 10) || 5,
+    max_nights: parseInt($("max-nights").value, 10) || 10,
     nonstop_only: $("alert-nonstop").checked,
     include_carry_on: $("carry-on-toggle").checked,
     max_price_cad: parseInt($("alert-price").value, 10) || 850,
@@ -351,7 +355,7 @@ async function saveAlert(enabled) {
     } else if (saved.email_configured) {
       status.textContent = `Saved. We'll email ${saved.email} if a flight drops under CA$${saved.max_price_cad}.`;
     } else {
-      status.textContent = `Saved for ${saved.email} (under CA$${saved.max_price_cad}). Email sending activates once RESEND_API_KEY or SMTP is added on the server.`;
+      status.textContent = `Saved for ${saved.email} (under CA$${saved.max_price_cad}). Email delivery activates once RESEND_API_KEY or SMTP is configured on the server.`;
     }
   } catch (err) {
     status.classList.add("error");
@@ -380,8 +384,10 @@ document.addEventListener("DOMContentLoaded", () => {
       chip.classList.add("active");
       const p = PRESETS[chip.dataset.preset];
       if (p) {
-        $("window-start").value = p.start;
-        $("window-end").value = p.end;
+        $("depart-start").value = p.depStart;
+        $("depart-end").value = p.depEnd;
+        $("return-start").value = p.retStart;
+        $("return-end").value = p.retEnd;
         $("min-nights").value = p.min;
         $("max-nights").value = p.max;
         runSearch(false);
