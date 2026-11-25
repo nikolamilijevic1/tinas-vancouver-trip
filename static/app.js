@@ -50,6 +50,12 @@ function getSelectedOrigins() {
   return list;
 }
 
+function getSelectedDestinations() {
+  const list = ["YVR"];
+  if ($("include-yxx-toggle").checked) list.push("YXX");
+  return list;
+}
+
 /* ---------- Live Search ---------- */
 async function runSearch(forceRefresh = false) {
   if (state.scanning) return;
@@ -66,11 +72,13 @@ async function runSearch(forceRefresh = false) {
   const minN = Math.max(1, parseInt($("min-nights").value, 10) || 5);
   const maxN = Math.max(minN, parseInt($("max-nights").value, 10) || 10);
   const origins = getSelectedOrigins();
+  const destinations = getSelectedDestinations();
 
   const payload = {
     origin: "YOW",
     origins,
     destination: "YVR",
+    destinations,
     depart_start: $("depart-start").value,
     depart_end: $("depart-end").value,
     return_start: $("return-start").value,
@@ -199,7 +207,13 @@ function renderFlights() {
       const first = f.legs[0];
       const last = f.legs[f.legs.length - 1];
       const isAltOrigin = f.origin !== "YOW";
+      const isAltDest = f.destination !== "YVR";
+      const isAltRoute = isAltOrigin || isAltDest;
       const originLabel = ORIGIN_NAMES[f.origin] || f.origin;
+      const altParts = [];
+      if (isAltOrigin) altParts.push(`From ${originLabel}`);
+      if (isAltDest) altParts.push(`Lands in Abbotsford (${f.destination})`);
+      const altTag = altParts.join(" · ");
       const stopsText =
         f.stops === 0
           ? "Nonstop"
@@ -210,9 +224,9 @@ function renderFlights() {
       const bagLabel = f.carry_on_included ? "round trip · carry-on incl." : "round trip";
 
       return `
-        <article class="flight-row ${isAltOrigin ? "alt-origin" : ""}">
+        <article class="flight-row ${isAltRoute ? "alt-origin" : ""}">
           <div class="fr-meta">
-            ${isAltOrigin ? `<span class="origin-tag">From ${esc(originLabel)}</span>` : ""}
+            ${altTag ? `<span class="origin-tag">${esc(altTag)}</span>` : ""}
             <span class="fr-dates">${dayAndDate(f.depart_date)} – ${dayAndDate(f.return_date)} · ${f.nights} nights</span>
             <span class="fr-airline">${esc(f.airlines.join(" + "))}</span>
             ${f.note ? `<span class="fr-note">${esc(f.note)}</span>` : ""}

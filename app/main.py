@@ -55,8 +55,20 @@ async def search_stream(req: SearchRequest):
         if not origin_list:
             origin_list = ["YOW"]
 
-        # When comparing multiple origins simultaneously, cap pairs per origin so scan stays snappy
-        effective_max_pairs = req.max_pairs if len(origin_list) == 1 else max(4, min(6, req.max_pairs // len(origin_list) + 1))
+        dest_list = [d.strip().upper() for d in (req.destinations or [req.destination]) if d.strip()]
+        if not dest_list:
+            dest_list = ["YVR"]
+
+        route_count = len(origin_list) * len(dest_list)
+        # Keep total Google Flights queries snappy when comparing multiple origin/destination airports
+        if route_count == 1:
+            effective_max_pairs = req.max_pairs
+        elif route_count == 2:
+            effective_max_pairs = 6
+        elif route_count <= 4:
+            effective_max_pairs = 4
+        else:
+            effective_max_pairs = 3
 
         pairs = generate_candidate_pairs(
             req.depart_start,
@@ -70,27 +82,17 @@ async def search_stream(req: SearchRequest):
 
         jobs: list[dict[str, Any]] = []
         for orig in origin_list:
-            for dep, ret in pairs:
-                jobs.append(
-                    {
-                        "origin": orig,
-                        "destination": req.destination.upper(),
-                        "depart_date": dep,
-                        "return_date": ret,
-                        "is_nearby": False,
-                    }
-                )
-
-        if req.include_nearby_airports and origin_list == ["YOW"] and req.destination.upper() == "YVR":
-            sample = pairs[:: max(1, len(pairs) // 3)][:3]
-            for dep, ret in sample:
-                jobs.append(
-                    {"origin": "YUL", "destination": "YVR", "depart_date": dep, "return_date": ret, "is_nearby": True}
-                )
-            if sample:
-                jobs.append(
-                    {"origin": "YOW", "destination": "YXX", "depart_date": sample[0][0], "return_date": sample[0][1], "is_nearby": True}
-                )
+            for dest in dest_list:
+                for dep, ret in pairs:
+                    jobs.append(
+                        {
+                            "origin": orig,
+                            "destination": dest,
+                            "depart_date": dep,
+                            "return_date": ret,
+                            "is_nearby": (orig != "YOW" or dest != "YVR"),
+                        }
+                    )
 
         total = len(jobs)
         yield f"data: {json.dumps({'type': 'start', 'total': total})}\n\n"

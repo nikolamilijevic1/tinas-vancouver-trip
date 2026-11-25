@@ -7,6 +7,7 @@ class SearchRequest(BaseModel):
     origin: str = Field(default="YOW")
     origins: list[str] | None = Field(default=None, description="Optional list of origin IATA codes, e.g. ['YOW', 'YYZ', 'YTZ']")
     destination: str = Field(default="YVR")
+    destinations: list[str] | None = Field(default=None, description="Optional list of destination IATA codes, e.g. ['YVR', 'YXX']")
     depart_start: str = Field(description="Earliest departure date YYYY-MM-DD")
     depart_end: str = Field(description="Latest departure date YYYY-MM-DD")
     return_start: str = Field(description="Earliest return date YYYY-MM-DD")
