@@ -1,1 +1,1 @@
-"""Westbound — Ottawa to Vancouver Holiday Flight Concierge."""
+"""Tina's Vancouver Trip flight finder."""

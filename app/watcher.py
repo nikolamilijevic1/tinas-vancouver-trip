@@ -138,7 +138,7 @@ async def run_alert_check(*, force_send: bool = False) -> dict[str, Any]:
         "checked_at": now_iso,
         "sent": False,
         "lowest_cad": cheapest.price_cad,
-        "detail": f"Checked — lowest is CA${cheapest.price_cad} (target is CA${target}).",
+        "detail": f"Checked: lowest is CA${cheapest.price_cad} (target is CA${target}).",
     }
 
 

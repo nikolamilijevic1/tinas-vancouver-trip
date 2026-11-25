@@ -925,6 +925,63 @@ select:focus {
   line-height: 1.42;
 }
 
+.walk-footer {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.81rem;
+  color: var(--ink-secondary);
+}
+
+.walk-reso,
+.walk-sources {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.walk-foot-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--latte);
+  margin-right: 4px;
+}
+
+.walk-reso a {
+  color: var(--sage);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid var(--sage-border);
+}
+
+.walk-reso a:hover {
+  border-bottom-color: var(--sage);
+}
+
+.walk-sources a {
+  color: var(--ink-secondary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.walk-sources a:hover {
+  color: var(--ink);
+}
+
+.walk-foot-note {
+  color: var(--ink-muted);
+}
+
+.dot-sep {
+  color: var(--ink-muted);
+}
+
 .footer {
   margin-top: 40px;
   padding-top: 16px;
