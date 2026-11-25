@@ -776,8 +776,7 @@ select:focus {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 16px;
+  gap: 14px;
 }
 
 .walk-meta {
@@ -808,12 +807,12 @@ select:focus {
 
 .walk-stops {
   margin: 0;
-  padding: 0 0 0 18px;
+  padding: 14px 0 0 18px;
   display: flex;
   flex-direction: column;
   gap: 10px;
   border-top: 1px solid var(--border);
-  padding-top: 14px;
+  flex: 1;
 }
 
 .walk-stops li {
@@ -831,9 +830,10 @@ select:focus {
 }
 
 .walk-stops li span {
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   color: var(--ink-muted);
-  margin-left: 4px;
+  display: inline-block;
+  margin-left: 5px;
 }
 
 .walk-stops li p {
