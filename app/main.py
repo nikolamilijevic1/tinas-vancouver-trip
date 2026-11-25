@@ -51,6 +51,13 @@ async def health():
 @app.post("/api/search/stream")
 async def search_stream(req: SearchRequest):
     async def event_stream() -> AsyncGenerator[str, None]:
+        origin_list = [o.strip().upper() for o in (req.origins or [req.origin]) if o.strip()]
+        if not origin_list:
+            origin_list = ["YOW"]
+
+        # When comparing multiple origins simultaneously, cap pairs per origin so scan stays snappy
+        effective_max_pairs = req.max_pairs if len(origin_list) == 1 else max(4, min(6, req.max_pairs // len(origin_list) + 1))
+
         pairs = generate_candidate_pairs(
             req.depart_start,
             req.depart_end,
@@ -58,21 +65,23 @@ async def search_stream(req: SearchRequest):
             req.return_end,
             req.min_nights,
             req.max_nights,
-            max_pairs=req.max_pairs,
+            max_pairs=effective_max_pairs,
         )
 
-        jobs: list[dict[str, Any]] = [
-            {
-                "origin": req.origin.upper(),
-                "destination": req.destination.upper(),
-                "depart_date": dep,
-                "return_date": ret,
-                "is_nearby": False,
-            }
-            for dep, ret in pairs
-        ]
+        jobs: list[dict[str, Any]] = []
+        for orig in origin_list:
+            for dep, ret in pairs:
+                jobs.append(
+                    {
+                        "origin": orig,
+                        "destination": req.destination.upper(),
+                        "depart_date": dep,
+                        "return_date": ret,
+                        "is_nearby": False,
+                    }
+                )
 
-        if req.include_nearby_airports and req.origin.upper() == "YOW" and req.destination.upper() == "YVR":
+        if req.include_nearby_airports and origin_list == ["YOW"] and req.destination.upper() == "YVR":
             sample = pairs[:: max(1, len(pairs) // 3)][:3]
             for dep, ret in sample:
                 jobs.append(

@@ -5,14 +5,20 @@ const PRESETS = {
   after: { depStart: "2026-12-26", depEnd: "2026-12-29", retStart: "2027-01-01", retEnd: "2027-01-06", min: 4, max: 9 },
 };
 
+const ORIGIN_META = {
+  YOW: { city: "OTTAWA", code: "YOW", label: "Ottawa", list: ["YOW"] },
+  YYZ: { city: "TORONTO PEARSON", code: "YYZ", label: "Toronto Pearson", list: ["YYZ"] },
+  YTZ: { city: "BILLY BISHOP", code: "YTZ", label: "Billy Bishop", list: ["YTZ"] },
+  ALL: { city: "OTTAWA / TORONTO", code: "YOW·YYZ·YTZ", label: "Ottawa or Toronto", list: ["YOW", "YYZ", "YTZ"] },
+};
+
 const state = {
   scanning: false,
+  originMode: "YOW",
   sortBy: "recommended",
   airline: "ALL",
-  selectedPair: null,
   showAllFlights: false,
   flights: [],
-  matrix: [],
 };
 
 const $ = (id) => document.getElementById(id);
@@ -23,12 +29,6 @@ function esc(s) {
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
-}
-
-function shortDate(iso) {
-  if (!iso) return "";
-  const [y, m, d] = iso.split("-").map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString("en-CA", { month: "short", day: "numeric" });
 }
 
 function dayAndDate(iso) {
@@ -51,14 +51,22 @@ function fmtCAD(n) {
   return `CA$${Number(n).toLocaleString("en-CA")}`;
 }
 
+function updateOriginLabels() {
+  const meta = ORIGIN_META[state.originMode] || ORIGIN_META.YOW;
+  $("ticket-origin-city").textContent = meta.city;
+  const codeEl = $("ticket-origin-code");
+  codeEl.textContent = meta.code;
+  codeEl.style.fontSize = state.originMode === "ALL" ? "1.02rem" : "";
+  $("outbound-title").textContent = `Flying out · ${meta.label} to Vancouver`;
+  $("return-title").textContent = `Flying home · Vancouver to ${meta.label}`;
+}
+
 /* ---------- Live Search ---------- */
 async function runSearch(forceRefresh = false) {
   if (state.scanning) return;
   state.scanning = true;
-  state.selectedPair = null;
   state.showAllFlights = false;
   state.airline = "ALL";
-  state.matrix = [];
 
   $("search-btn").disabled = true;
   $("search-btn").textContent = "Searching…";
@@ -68,9 +76,11 @@ async function runSearch(forceRefresh = false) {
 
   const minN = Math.max(1, parseInt($("min-nights").value, 10) || 5);
   const maxN = Math.max(minN, parseInt($("max-nights").value, 10) || 10);
+  const meta = ORIGIN_META[state.originMode] || ORIGIN_META.YOW;
 
   const payload = {
-    origin: "YOW",
+    origin: meta.list[0],
+    origins: meta.list,
     destination: "YVR",
     depart_start: $("depart-start").value,
     depart_end: $("depart-end").value,
@@ -80,7 +90,7 @@ async function runSearch(forceRefresh = false) {
     max_nights: maxN,
     nonstop_only: $("nonstop-toggle").checked,
     include_carry_on: $("carry-on-toggle").checked,
-    include_nearby_airports: $("nearby-toggle").checked,
+    include_nearby_airports: false,
     max_pairs: 10,
     force_refresh: forceRefresh,
   };
@@ -122,71 +132,24 @@ async function runSearch(forceRefresh = false) {
 
 function onStreamEvent(evt) {
   if (evt.type === "start") {
-    $("progress-text").textContent = `Checking ${evt.total} date pairs…`;
+    $("progress-text").textContent = `Checking ${evt.total} date combinations…`;
     return;
   }
 
   if (evt.type === "progress") {
     const pct = Math.max(8, Math.round((evt.completed / evt.total) * 100));
     $("progress-fill").style.width = `${pct}%`;
-    $("progress-text").textContent = `Checked ${evt.completed} of ${evt.total} date pairs`;
-    if (evt.cell) {
-      state.matrix.push(evt.cell);
-      $("dates-section").classList.remove("hidden");
-      renderDateGrid();
-    }
+    $("progress-text").textContent = `Checked ${evt.completed} of ${evt.total} combinations`;
     return;
   }
 
   if (evt.type === "complete") {
-    state.matrix = evt.matrix || [];
     state.flights = evt.flights || [];
-    setTimeout(() => $("progress-wrap").classList.add("hidden"), 300);
-
-    $("dates-section").classList.remove("hidden");
+    setTimeout(() => $("progress-wrap").classList.add("hidden"), 250);
     $("results-section").classList.remove("hidden");
-    renderDateGrid();
     populateAirlines();
     renderFlights();
   }
-}
-
-function renderDateGrid() {
-  const grid = $("date-grid");
-  const cells = state.matrix.filter((c) => c.cheapest_cad);
-  if (!cells.length) {
-    grid.innerHTML = `<div class="empty-state">No prices returned for these dates.</div>`;
-    return;
-  }
-
-  const minPrice = Math.min(...cells.map((c) => c.cheapest_cad));
-  $("clear-date-filter").classList.toggle("hidden", !state.selectedPair);
-
-  grid.innerHTML = cells
-    .map((c) => {
-      const key = `${c.origin}|${c.destination}|${c.depart_date}|${c.return_date}`;
-      const isLowest = c.cheapest_cad === minPrice;
-      const isSelected = state.selectedPair === key;
-      const routeNote = c.origin !== "YOW" || c.destination !== "YVR" ? ` · ${c.origin}–${c.destination}` : "";
-      const nsNote = c.cheapest_nonstop_cad ? ` · Nonstop ${fmtCAD(c.cheapest_nonstop_cad)}` : "";
-      return `
-        <button type="button" class="date-cell ${isLowest ? "lowest" : ""} ${isSelected ? "selected" : ""}" data-key="${esc(key)}">
-          <span class="date-cell-dates">${shortDate(c.depart_date)} – ${shortDate(c.return_date)}</span>
-          <span class="date-cell-price">${fmtCAD(c.cheapest_cad)}</span>
-          <span class="date-cell-sub">${c.nights} nights${esc(routeNote)}${nsNote}</span>
-        </button>
-      `;
-    })
-    .join("");
-
-  grid.querySelectorAll(".date-cell").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const k = btn.dataset.key;
-      state.selectedPair = state.selectedPair === k ? null : k;
-      renderDateGrid();
-      renderFlights();
-    });
-  });
 }
 
 function populateAirlines() {
@@ -207,12 +170,6 @@ function renderFlights() {
   const list = $("flight-list");
   let rows = [...state.flights];
 
-  if (state.selectedPair) {
-    const [orig, dest, dep, ret] = state.selectedPair.split("|");
-    rows = rows.filter(
-      (f) => f.origin === orig && f.destination === dest && f.depart_date === dep && f.return_date === ret
-    );
-  }
   if (state.airline !== "ALL") {
     rows = rows.filter((f) => f.primary_airline === state.airline);
   }
@@ -227,21 +184,20 @@ function renderFlights() {
     rows.sort((a, b) => b.rank_score - a.rank_score || a.price_cad - b.price_cad);
   }
 
-  const pairLabel = state.selectedPair
-    ? (() => {
-        const [, , dep, ret] = state.selectedPair.split("|");
-        return ` for ${shortDate(dep)} – ${shortDate(ret)}`;
-      })()
-    : "";
-  $("results-count").textContent = `${rows.length} flight${rows.length === 1 ? "" : "s"}${pairLabel}`;
+  const meta = ORIGIN_META[state.originMode] || ORIGIN_META.YOW;
+  $("results-count").textContent = `${rows.length} flight${rows.length === 1 ? "" : "s"} from ${meta.label}`;
 
   if (!rows.length) {
     $("show-more-wrap").classList.add("hidden");
-    list.innerHTML = `<div class="empty-state">No flights match these filters. Try unchecking "Nonstop only" or widening your dates.</div>`;
+    const extraHint =
+      state.originMode === "YTZ"
+        ? " Billy Bishop (YTZ) doesn't have nonstop flights to Vancouver, so try unchecking Nonstop only."
+        : " Try unchecking Nonstop only or widening your dates.";
+    list.innerHTML = `<div class="empty-state">No flights match these filters.${extraHint}</div>`;
     return;
   }
 
-  const defaultLimit = state.selectedPair ? 12 : 4;
+  const defaultLimit = 4;
   const limit = state.showAllFlights ? 40 : defaultLimit;
   const visible = rows.slice(0, limit);
   const showMoreWrap = $("show-more-wrap");
@@ -326,6 +282,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  document.querySelectorAll(".origin-chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll(".origin-chip").forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+      state.originMode = chip.dataset.origin;
+      updateOriginLabels();
+      runSearch(false);
+    });
+  });
+
   document.querySelectorAll(".chip").forEach((chip) => {
     chip.addEventListener("click", () => {
       document.querySelectorAll(".chip").forEach((c) => c.classList.remove("active"));
@@ -348,13 +314,6 @@ document.addEventListener("DOMContentLoaded", () => {
     runSearch(false);
   });
 
-  $("clear-date-filter").addEventListener("click", () => {
-    state.selectedPair = null;
-    state.showAllFlights = false;
-    renderDateGrid();
-    renderFlights();
-  });
-
   $("show-more-btn").addEventListener("click", () => {
     state.showAllFlights = !state.showAllFlights;
     renderFlights();
@@ -374,5 +333,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  updateOriginLabels();
   runSearch(false);
 });
