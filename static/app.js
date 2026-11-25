@@ -1,10 +1,3 @@
-const PRESETS = {
-  xmas: { depStart: "2026-12-18", depEnd: "2026-12-23", retStart: "2026-12-27", retEnd: "2027-01-04", min: 5, max: 10 },
-  before: { depStart: "2026-12-19", depEnd: "2026-12-22", retStart: "2026-12-29", retEnd: "2027-01-02", min: 6, max: 10 },
-  early: { depStart: "2026-12-14", depEnd: "2026-12-19", retStart: "2026-12-23", retEnd: "2026-12-28", min: 5, max: 9 },
-  after: { depStart: "2026-12-26", depEnd: "2026-12-29", retStart: "2027-01-01", retEnd: "2027-01-06", min: 4, max: 9 },
-};
-
 const ORIGIN_META = {
   YOW: { city: "OTTAWA", code: "YOW", label: "Ottawa", list: ["YOW"] },
   YYZ: { city: "TORONTO PEARSON", code: "YYZ", label: "Toronto Pearson", list: ["YYZ"] },
@@ -289,23 +282,6 @@ document.addEventListener("DOMContentLoaded", () => {
       state.originMode = chip.dataset.origin;
       updateOriginLabels();
       runSearch(false);
-    });
-  });
-
-  document.querySelectorAll(".chip").forEach((chip) => {
-    chip.addEventListener("click", () => {
-      document.querySelectorAll(".chip").forEach((c) => c.classList.remove("active"));
-      chip.classList.add("active");
-      const p = PRESETS[chip.dataset.preset];
-      if (p) {
-        $("depart-start").value = p.depStart;
-        $("depart-end").value = p.depEnd;
-        $("return-start").value = p.retStart;
-        $("return-end").value = p.retEnd;
-        $("min-nights").value = p.min;
-        $("max-nights").value = p.max;
-        runSearch(false);
-      }
     });
   });
 
