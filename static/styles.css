@@ -86,7 +86,7 @@ body {
 .hero-top-row {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
 }
