@@ -68,22 +68,12 @@
       </div>
     </header>
 
-    <!-- Main Search Card (Origin Selector + 4-Date Departure & Return Window) -->
+    <!-- Main Search Card (4-Date Departure & Return Window) -->
     <section class="search-box" aria-label="Flight search">
-      <div class="search-top-bar">
-        <div class="origin-picker" role="radiogroup" aria-label="Departure airport">
-          <span class="picker-label">Leaving from</span>
-          <button type="button" class="origin-chip active" data-origin="YOW">Ottawa (YOW)</button>
-          <button type="button" class="origin-chip" data-origin="YYZ">Toronto Pearson (YYZ)</button>
-          <button type="button" class="origin-chip" data-origin="YTZ">Billy Bishop (YTZ)</button>
-          <button type="button" class="origin-chip" data-origin="ALL">Compare all</button>
-        </div>
-      </div>
-
       <form id="search-form">
         <div class="window-grid">
           <div class="window-group">
-            <span class="group-title" id="outbound-title">Flying out &middot; Ottawa to Vancouver</span>
+            <span class="group-title">Flying out &middot; Ottawa to Vancouver</span>
             <div class="date-pair-inputs">
               <div class="field">
                 <label for="depart-start">Earliest departure</label>
@@ -97,7 +87,7 @@
           </div>
 
           <div class="window-group">
-            <span class="group-title" id="return-title">Flying home &middot; Vancouver to Ottawa</span>
+            <span class="group-title">Flying home &middot; Vancouver to Ottawa</span>
             <div class="date-pair-inputs">
               <div class="field">
                 <label for="return-start">Earliest return</label>
@@ -128,6 +118,14 @@
             <label class="check">
               <input type="checkbox" id="carry-on-toggle" checked />
               <span>Carry-on bag</span>
+            </label>
+            <label class="check">
+              <input type="checkbox" id="include-yul-toggle" />
+              <span>Include Montreal (YUL)</span>
+            </label>
+            <label class="check">
+              <input type="checkbox" id="include-to-toggle" />
+              <span>Include Toronto (YYZ / YTZ)</span>
             </label>
           </div>
 

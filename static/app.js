@@ -1,13 +1,12 @@
-const ORIGIN_META = {
-  YOW: { city: "OTTAWA", code: "YOW", label: "Ottawa", list: ["YOW"] },
-  YYZ: { city: "TORONTO PEARSON", code: "YYZ", label: "Toronto Pearson", list: ["YYZ"] },
-  YTZ: { city: "BILLY BISHOP", code: "YTZ", label: "Billy Bishop", list: ["YTZ"] },
-  ALL: { city: "OTTAWA / TORONTO", code: "YOW·YYZ·YTZ", label: "Ottawa or Toronto", list: ["YOW", "YYZ", "YTZ"] },
+const ORIGIN_NAMES = {
+  YOW: "Ottawa (YOW)",
+  YUL: "Montreal (YUL)",
+  YYZ: "Toronto Pearson (YYZ)",
+  YTZ: "Billy Bishop (YTZ)",
 };
 
 const state = {
   scanning: false,
-  originMode: "YOW",
   sortBy: "recommended",
   airline: "ALL",
   showAllFlights: false,
@@ -44,14 +43,11 @@ function fmtCAD(n) {
   return `CA$${Number(n).toLocaleString("en-CA")}`;
 }
 
-function updateOriginLabels() {
-  const meta = ORIGIN_META[state.originMode] || ORIGIN_META.YOW;
-  $("ticket-origin-city").textContent = meta.city;
-  const codeEl = $("ticket-origin-code");
-  codeEl.textContent = meta.code;
-  codeEl.style.fontSize = state.originMode === "ALL" ? "1.02rem" : "";
-  $("outbound-title").textContent = `Flying out · ${meta.label} to Vancouver`;
-  $("return-title").textContent = `Flying home · Vancouver to ${meta.label}`;
+function getSelectedOrigins() {
+  const list = ["YOW"];
+  if ($("include-yul-toggle").checked) list.push("YUL");
+  if ($("include-to-toggle").checked) list.push("YYZ", "YTZ");
+  return list;
 }
 
 /* ---------- Live Search ---------- */
@@ -69,11 +65,11 @@ async function runSearch(forceRefresh = false) {
 
   const minN = Math.max(1, parseInt($("min-nights").value, 10) || 5);
   const maxN = Math.max(minN, parseInt($("max-nights").value, 10) || 10);
-  const meta = ORIGIN_META[state.originMode] || ORIGIN_META.YOW;
+  const origins = getSelectedOrigins();
 
   const payload = {
-    origin: meta.list[0],
-    origins: meta.list,
+    origin: "YOW",
+    origins,
     destination: "YVR",
     depart_start: $("depart-start").value,
     depart_end: $("depart-end").value,
@@ -177,16 +173,11 @@ function renderFlights() {
     rows.sort((a, b) => b.rank_score - a.rank_score || a.price_cad - b.price_cad);
   }
 
-  const meta = ORIGIN_META[state.originMode] || ORIGIN_META.YOW;
-  $("results-count").textContent = `${rows.length} flight${rows.length === 1 ? "" : "s"} from ${meta.label}`;
+  $("results-count").textContent = `${rows.length} flight${rows.length === 1 ? "" : "s"}`;
 
   if (!rows.length) {
     $("show-more-wrap").classList.add("hidden");
-    const extraHint =
-      state.originMode === "YTZ"
-        ? " Billy Bishop (YTZ) doesn't have nonstop flights to Vancouver, so try unchecking Nonstop only."
-        : " Try unchecking Nonstop only or widening your dates.";
-    list.innerHTML = `<div class="empty-state">No flights match these filters.${extraHint}</div>`;
+    list.innerHTML = `<div class="empty-state">No flights match these filters. Try unchecking Nonstop only or widening your dates.</div>`;
     return;
   }
 
@@ -207,6 +198,8 @@ function renderFlights() {
     .map((f) => {
       const first = f.legs[0];
       const last = f.legs[f.legs.length - 1];
+      const isAltOrigin = f.origin !== "YOW";
+      const originLabel = ORIGIN_NAMES[f.origin] || f.origin;
       const stopsText =
         f.stops === 0
           ? "Nonstop"
@@ -214,15 +207,14 @@ function renderFlights() {
           ? `${f.stops} stop · ${f.layovers.map((l) => `${fmtDur(l.duration_minutes)} in ${l.airport_code}`).join(", ")}`
           : `${f.stops} stop`;
 
-      const details = [first?.flight_number, first?.aircraft].filter(Boolean).join(" · ");
       const bagLabel = f.carry_on_included ? "round trip · carry-on incl." : "round trip";
 
       return `
-        <article class="flight-row">
+        <article class="flight-row ${isAltOrigin ? "alt-origin" : ""}">
           <div class="fr-meta">
-            <span class="fr-dates">${dayAndDate(f.depart_date)} – ${dayAndDate(f.return_date)} · ${f.nights}n</span>
+            ${isAltOrigin ? `<span class="origin-tag">From ${esc(originLabel)}</span>` : ""}
+            <span class="fr-dates">${dayAndDate(f.depart_date)} – ${dayAndDate(f.return_date)} · ${f.nights} nights</span>
             <span class="fr-airline">${esc(f.airlines.join(" + "))}</span>
-            ${details ? `<span class="fr-sub">${esc(details)}</span>` : ""}
             ${f.note ? `<span class="fr-note">${esc(f.note)}</span>` : ""}
           </div>
 
@@ -275,16 +267,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  document.querySelectorAll(".origin-chip").forEach((chip) => {
-    chip.addEventListener("click", () => {
-      document.querySelectorAll(".origin-chip").forEach((c) => c.classList.remove("active"));
-      chip.classList.add("active");
-      state.originMode = chip.dataset.origin;
-      updateOriginLabels();
-      runSearch(false);
-    });
-  });
-
   $("search-form").addEventListener("submit", (e) => {
     e.preventDefault();
     runSearch(false);
@@ -309,6 +291,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  updateOriginLabels();
   runSearch(false);
 });

@@ -440,12 +440,6 @@ def rank_flights(flights: list[FlightOptionOut]) -> list[FlightOptionOut]:
 
         if f.primary_airline in ULCC_AIRLINES and not f.carry_on_included:
             note = note or "Carry-on bag fee extra"
-        if f.is_nearby_airport:
-            penalty += 14
-            if f.origin != "YOW":
-                note = f"Departs Montreal ({f.origin})"
-            elif f.destination != "YVR":
-                note = f"Lands Abbotsford ({f.destination})"
 
         price_part = max(0, 100 - int(((f.price_cad - min_p) / spread) * 65))
         comfort_part = max(0, 100 - penalty)
